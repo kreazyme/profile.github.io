@@ -1,16 +1,21 @@
-# profile
+## FrameIt profile page
 
-A new Flutter project.
+This is the profile page for FrameIt, a Flutter application. The page includes a profile picture, name, title, social media links, and a brief description. The design features a light yellow background with white cards for content sections.
+
+### Features
+
+- Profile picture with hover effect
+- Name and title display
+- Social media links (GitHub, LinkedIn, Twitter)
+- Description section with a light yellow background
+- Responsive design for different screen sizes
+
+### Technologies Used
+
+- Flutter
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+To run this project, ensure you have Flutter installed. Clone the repository and run `flutter pub get` to install dependencies. Use `flutter run` to start the application.
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### Note
