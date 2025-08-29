@@ -1,4 +1,8 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -12,6 +16,7 @@ class _ProfilePageState extends State<ProfilePage>
   late AnimationController _controller;
   late Animation<double> _rotationAnim;
   late Animation<double> _scaleAnim;
+  bool isPressed = false;
 
   @override
   void initState() {
@@ -21,14 +26,14 @@ class _ProfilePageState extends State<ProfilePage>
       vsync: this,
     );
 
-    _rotationAnim = Tween<double>(begin: 0, end: 8 * 3.14159 / 180).animate(
+    _rotationAnim = Tween<double>(begin: 0, end: 6 * 3.14159 / 180).animate(
       CurvedAnimation(
         parent: _controller,
         curve: const Interval(0.0, 1.0, curve: Curves.easeOutBack),
       ),
     );
 
-    _scaleAnim = Tween<double>(begin: 1.0, end: 1.15).animate(
+    _scaleAnim = Tween<double>(begin: 1.0, end: 1.05).animate(
       CurvedAnimation(
         parent: _controller,
         curve: const Interval(0.0, 1.0, curve: Curves.easeOutCubic),
@@ -45,7 +50,7 @@ class _ProfilePageState extends State<ProfilePage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFEFF7F4),
+      backgroundColor: Colors.yellow.shade50,
       body: Center(
         child: MouseRegion(
           onEnter: (_) {
@@ -65,7 +70,17 @@ class _ProfilePageState extends State<ProfilePage>
                 child: child,
               );
             },
-            child: _ProfileItem(),
+            child: GestureDetector(
+              onTap: () {
+                if (isPressed) {
+                  _controller.reverse();
+                } else {
+                  _controller.forward();
+                }
+                isPressed = !isPressed;
+              },
+              child: _ProfileItem(),
+            ),
           ),
         ),
       ),
@@ -74,13 +89,21 @@ class _ProfilePageState extends State<ProfilePage>
 }
 
 class _ProfileItem extends StatelessWidget {
-  const _ProfileItem({super.key});
+  _ProfileItem();
+
+  final font = GoogleFonts.spaceMono(fontSize: 14);
+
+  void openMail() {
+    launchUrlString('mailto:spoon.me.dev@gmail.com');
+  }
 
   @override
   Widget build(BuildContext context) {
+    final now = DateTime.now();
     return Container(
       width: 400,
-      padding: const EdgeInsets.all(24),
+      padding: const EdgeInsets.all(12),
+      margin: const EdgeInsets.all(32),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
@@ -91,141 +114,192 @@ class _ProfileItem extends StatelessWidget {
             blurRadius: 8,
             offset: const Offset(0, 4),
           ),
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 16,
+            offset: const Offset(0, 8),
+          ),
         ],
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Header with GitHub icon and social links
           Row(
             children: [
-              const Icon(Icons.account_circle, size: 24),
+              CircleAvatar(
+                radius: 12,
+                backgroundImage: AssetImage('assets/logo.png'),
+              ),
               const SizedBox(width: 8),
-              const Text(
-                "kreazyme/README.md",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                  fontFamily: 'monospace',
-                ),
+              Text(
+                "frame_it/README.md",
+                style: font.copyWith(fontWeight: FontWeight.bold),
               ),
               const Spacer(),
-              IconButton(
-                icon: const Icon(Icons.link, color: Color(0xFF0077B5)),
-                onPressed: () {},
-              ),
-              IconButton(
-                icon: const Icon(Icons.photo_camera, color: Color(0xFFE1306C)),
-                onPressed: () {},
-              ),
+              // IconButton(
+              //   icon: const Icon(Icons.link, color: Color(0xFF0077B5)),
+              //   onPressed: () {},
+              // ),
+              // IconButton(
+              //   icon: const Icon(Icons.photo_camera, color: Color(0xFFE1306C)),
+              //   onPressed: () {},
+              // ),
             ],
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 8),
           // Profile content
-          const Column(
+          Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Text("Hi, we are frame_it app", style: font),
+              SizedBox(height: 24),
               Text(
-                "hi, im spoon.dev",
-                style: TextStyle(fontFamily: 'monospace', fontSize: 15),
-              ),
-              SizedBox(height: 12),
-              Text(
-                "Flutter Developer",
-                style: TextStyle(
-                  fontFamily: 'monospace',
-                  fontSize: 15,
-                  color: Colors.blue,
+                "We created awesome pictures with frames",
+                style: font.copyWith(
+                  color: Colors.purple,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              SizedBox(height: 8),
-              Text(
-                "+ 🏃 living in Da nang, vietnam",
-                style: TextStyle(
-                  fontFamily: 'monospace',
-                  fontSize: 15,
-                  color: Colors.green,
-                ),
+              SizedBox(height: 4),
+              _TextItem(
+                text: '+ 📍 live in danang, vietnam 🇻🇳',
+                color: Colors.green,
               ),
-              Text(
-                "! 📍 from Nghi Xuan, Ha Tinh",
-                style: TextStyle(
-                  fontFamily: 'monospace',
-                  fontSize: 15,
-                  color: Colors.orange,
-                ),
+              _TextItem(
+                text: '^ 🧑‍💻 we built app with Flutter',
+                color: Colors.red,
               ),
-              Text(
-                "- 🎂 22 years old",
-                style: TextStyle(
-                  fontFamily: 'monospace',
-                  fontSize: 15,
-                  color: Colors.purple,
-                ),
+              _TextItem(
+                text: '& 🎂 ${now.year - 2001} years old',
+                color: Colors.indigo,
               ),
-              Text(
-                "# 🎵 altrock, indie",
-                style: TextStyle(
-                  fontFamily: 'monospace',
-                  fontSize: 15,
-                  color: Colors.grey,
-                ),
-              ),
-              Text(
-                "# 🎬 movie lover",
-                style: TextStyle(
-                  fontFamily: 'monospace',
-                  fontSize: 15,
-                  color: Colors.grey,
-                ),
-              ),
+              _TextItem(text: '# 📸 we took pictures', color: Colors.pink),
+              _TextItem(text: '! 🤑 money lover', color: Colors.teal),
             ],
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: 12),
           // Tech stack
           Container(
             width: double.infinity,
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: const Color(0xFFF5FBF7),
+              color: Colors.yellow.shade100,
               borderRadius: BorderRadius.circular(12),
             ),
             child: const Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "<tech-stack>",
+                  "<team-members>",
                   style: TextStyle(
-                    color: Colors.green,
-                    fontFamily: 'monospace',
+                    color: Colors.blueAccent,
                     fontWeight: FontWeight.bold,
-                    fontSize: 15,
+                    fontSize: 14,
                   ),
+                ),
+                SizedBox(height: 8),
+                Row(
+                  children: [
+                    _MemberItem(
+                      imagePath: 'assets/profile/fe.jpg',
+                      roleName: 'FrontendDev',
+                    ),
+                    _MemberItem(
+                      imagePath: 'assets/profile/mo.jpg',
+                      roleName: 'MobileDev',
+                    ),
+                    _MemberItem(
+                      imagePath: 'assets/profile/be.jpg',
+                      roleName: 'BackendDev',
+                    ),
+                  ],
                 ),
                 SizedBox(height: 12),
                 Row(
                   children: [
-                    FlutterLogo(size: 36),
-                    SizedBox(width: 16),
-                    Icon(Icons.code, size: 36, color: Colors.blue),
-                    SizedBox(width: 16),
-                    Icon(Icons.javascript, size: 36, color: Colors.amber),
+                    _MemberItem(
+                      imagePath: 'assets/profile/mkt.jpg',
+                      roleName: 'Marketing',
+                    ),
+                    _MemberItem(
+                      imagePath: 'assets/profile/pm.jpg',
+                      roleName: 'ProjectMan',
+                    ),
+                    _MemberItem(
+                      imagePath: 'assets/profile/des.jpg',
+                      roleName: 'Designer',
+                    ),
                   ],
                 ),
-                SizedBox(height: 12),
+                SizedBox(height: 8),
                 Text(
-                  "</tech-stack>",
+                  "</team-members>",
                   style: TextStyle(
-                    color: Colors.green,
-                    fontFamily: 'monospace',
+                    color: Colors.blueAccent,
                     fontWeight: FontWeight.bold,
-                    fontSize: 15,
+                    fontSize: 14,
                   ),
                 ),
               ],
             ),
           ),
+          const SizedBox(height: 8),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            color: Colors.purple.shade100,
+            child: Text.rich(
+              textAlign: TextAlign.start,
+              TextSpan(
+                children: [
+                  const TextSpan(text: 'Hello me at '),
+                  TextSpan(
+                    text: '@my_email',
+                    recognizer: TapGestureRecognizer()..onTap = openMail,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _TextItem extends StatelessWidget {
+  const _TextItem({required this.text, required this.color});
+
+  final String text;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: color.withValues(alpha: 0.2),
+      margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 3),
+      padding: const EdgeInsets.all(1) + const EdgeInsets.only(right: 8),
+      child: Text(text, style: TextStyle(fontSize: 13, color: color)),
+    );
+  }
+}
+
+class _MemberItem extends StatelessWidget {
+  const _MemberItem({required this.imagePath, required this.roleName});
+
+  final String imagePath;
+  final String roleName;
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          CircleAvatar(radius: 28, backgroundImage: AssetImage(imagePath)),
+          const SizedBox(height: 8),
+          Text(roleName, style: const TextStyle(fontSize: 12)),
         ],
       ),
     );
