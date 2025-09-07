@@ -9,14 +9,13 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'FrameIt - Portfolio',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        fontFamily: GoogleFonts.spaceMono().fontFamily,
+        fontFamily: GoogleFonts.firaMono().fontFamily,
       ),
       home: const ProfilePage(),
     );

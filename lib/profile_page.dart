@@ -90,7 +90,7 @@ class _ProfilePageState extends State<ProfilePage>
 class _ProfileItem extends StatelessWidget {
   _ProfileItem();
 
-  final font = GoogleFonts.spaceMono(fontSize: 14);
+  final font = GoogleFonts.firaMono(fontSize: 14);
 
   void openMail() {
     launchUrlString('mailto:spoon.me.dev@gmail.com');
@@ -136,13 +136,35 @@ class _ProfileItem extends StatelessWidget {
                 style: font.copyWith(fontWeight: FontWeight.bold),
               ),
               const Spacer(),
+              IconButton(
+                icon: const Icon(Icons.android_rounded, color: Colors.green),
+                onPressed: () {
+                  launchUrlString(
+                    'https://play.google.com/store/apps/details?id=spoon.app.frame_it',
+                  );
+                },
+              ),
               // IconButton(
-              //   icon: const Icon(Icons.link, color: Color(0xFF0077B5)),
-              //   onPressed: () {},
-              // ),
-              // IconButton(
-              //   icon: const Icon(Icons.photo_camera, color: Color(0xFFE1306C)),
-              //   onPressed: () {},
+              //   icon: const Icon(Icons.apple, color: Colors.grey),
+              //   onPressed: () {
+              //     showDialog(
+              //       context: context,
+              //       builder: (context) => AlertDialog(
+              //         title: Text('We are in developing!'),
+              //         content: Text(
+              //           'We are developing day by day to deliver iOS app. Thank to waiting for us',
+              //         ),
+              //         actions: [
+              //           FilledButton(
+              //             onPressed: () {
+              //               Navigator.pop(context);
+              //             },
+              //             child: Text('Ok'),
+              //           ),
+              //         ],
+              //       ),
+              //     );
+              //   },
               // ),
             ],
           ),
@@ -152,7 +174,7 @@ class _ProfileItem extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text("Hi, we are frame_it app", style: font),
-              SizedBox(height: 24),
+              SizedBox(height: 14),
               Text(
                 "We created awesome pictures with frames",
                 style: font.copyWith(
@@ -166,7 +188,7 @@ class _ProfileItem extends StatelessWidget {
                 color: Colors.green,
               ),
               _TextItem(
-                text: '^ 🧑‍💻 we built app with Flutter',
+                text: '^ 🧑‍💻 we built app with flutter',
                 color: Colors.red,
               ),
               _TextItem(
@@ -183,7 +205,7 @@ class _ProfileItem extends StatelessWidget {
             width: double.infinity,
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: Colors.yellow.shade100,
+              color: Colors.pink.shade100.withAlpha(50),
               borderRadius: BorderRadius.circular(12),
             ),
             child: const Column(
@@ -289,17 +311,60 @@ class _MemberItem extends StatelessWidget {
   final String imagePath;
   final String roleName;
 
+  void onTap(context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(
+          'Member profile',
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          spacing: 2,
+          children: [
+            Container(
+              width: 100,
+              height: 100,
+              decoration: BoxDecoration(
+                image: DecorationImage(image: AssetImage(imagePath)),
+                borderRadius: BorderRadius.circular(20),
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text('Full name: Tran Duc'),
+            Text('City: Da Nang, Viet Nam'),
+            Text('Age: ${DateTime.now().year - 2001}'),
+            Text('Role: $roleName'),
+          ],
+        ),
+        actions: [
+          FilledButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: Text('Ok'),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          CircleAvatar(radius: 28, backgroundImage: AssetImage(imagePath)),
-          const SizedBox(height: 8),
-          Text(roleName, style: const TextStyle(fontSize: 12)),
-        ],
+      child: InkWell(
+        onTap: () => onTap(context),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            CircleAvatar(radius: 28, backgroundImage: AssetImage(imagePath)),
+            const SizedBox(height: 8),
+            Text(roleName, style: const TextStyle(fontSize: 12)),
+          ],
+        ),
       ),
     );
   }

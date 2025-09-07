@@ -1,19 +1,80 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <!--
-    If you are serving your web app in a path other than the root, change the
-    href value below to reflect the base path you are serving from.
+<style>
+  .loading {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: #fffef7;
+    font-family: "Fira Code", monospace;
+  }
 
-    The path provided below has to start and end with a slash "/" in order for
-    it to work correctly.
+  .loader-text {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #6b21a8; /* purple like your title */
+    margin-top: 1rem;
+  }
 
-    For more details:
-    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
+  .emoji-badges {
+    display: flex;
+    gap: 0.5rem;
+  }
 
-    This is a placeholder for base href that will be replaced by the value of
-    the `--base-href` argument provided to `flutter build`.
-  -->
+  .badge {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.3rem 0.6rem;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    animation: bounce 1.2s infinite;
+  }
+
+  .badge:nth-child(1) {
+    background: #dcfce7;
+    animation-delay: 0s;
+  }
+  .badge:nth-child(2) {
+    background: #fee2e2;
+    animation-delay: 0.2s;
+  }
+  .badge:nth-child(3) {
+    background: #e0e7ff;
+    animation-delay: 0.4s;
+  }
+  .badge:nth-child(4) {
+    background: #fce7f3;
+    animation-delay: 0.6s;
+  }
+  .badge:nth-child(5) {
+    background: #d1fae5;
+    animation-delay: 0.8s;
+  }
+
+  @keyframes bounce {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-8px);
+    }
+  }
+</style>
+
+<div class="loading">
+  <div class="emoji-badges">
+    <div class="badge">📍 Danang</div>
+    <div class="badge">👨‍💻 Flutter</div>
+    <div class="badge">🎂 24</div>
+    <div class="badge">📸 Photo</div>
+    <div class="badge">🤑 Money</div>
+  </div>
+  <div class="loader-text">Loading...</div>
+</div>
   <base href="$FLUTTER_BASE_HREF">
 
   <meta charset="UTF-8">
@@ -23,16 +84,26 @@
   <!-- iOS meta tags & icons -->
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="profile">
+  <meta name="apple-mobile-web-app-title" content="FrameIt Portfolio">
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
 
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="favicon.png"/>
 
-  <title>profile</title>
+  <title>FrameIt Portfolio</title>
   <link rel="manifest" href="manifest.json">
 </head>
 <body>
+  <div class="loading">
+      <div class="loader"></div>
+  </div>
+  <script>
+      window.addEventListener("flutter-first-frame", function() {
+          var element = document.getElementsByClassName("loading");
+          element[0].parentNode.removeChild(element[0]);
+      });
+  </script>
+  <script defer src="main.dart.js" type="application/javascript"></script>
   <script src="flutter_bootstrap.js" async></script>
 </body>
 </html>
