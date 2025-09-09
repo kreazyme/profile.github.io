@@ -16,6 +16,7 @@ class _ProfilePageState extends State<ProfilePage>
   late Animation<double> _rotationAnim;
   late Animation<double> _scaleAnim;
   bool isPressed = false;
+  bool isDarkMode = false;
 
   @override
   void initState() {
@@ -48,8 +49,38 @@ class _ProfilePageState extends State<ProfilePage>
 
   @override
   Widget build(BuildContext context) {
+    final backgroundColor = isDarkMode ? Colors.black87 : Colors.yellow.shade50;
+    final textColor = isDarkMode ? Colors.white : Colors.black87;
+    final appBar = AppBar(
+      backgroundColor: backgroundColor,
+      actions: [
+        Text('Dark Mode', style: TextStyle(color: textColor)),
+        const SizedBox(width: 4),
+        Switch(
+          value: isDarkMode,
+          thumbIcon: WidgetStateProperty.fromMap({
+            WidgetState.selected: Icon(Icons.dark_mode),
+            WidgetState.any: Icon(Icons.light_mode),
+          }),
+          thumbColor: WidgetStateProperty.fromMap({
+            WidgetState.selected: Colors.white,
+            WidgetState.any: Colors.black,
+          }),
+          trackColor: WidgetStateProperty.fromMap({
+            WidgetState.selected: Colors.black,
+            WidgetState.any: Colors.white,
+          }),
+          trackOutlineColor: WidgetStateProperty.fromMap({
+            WidgetState.selected: Colors.white60,
+            WidgetState.any: Colors.black54,
+          }),
+          onChanged: (value) => setState(() => isDarkMode = !isDarkMode),
+        ),
+      ],
+    );
     return Scaffold(
-      backgroundColor: Colors.yellow.shade50,
+      backgroundColor: backgroundColor,
+      appBar: appBar,
       body: Center(
         child: MouseRegion(
           onEnter: (_) {
@@ -78,7 +109,7 @@ class _ProfilePageState extends State<ProfilePage>
                 }
                 isPressed = !isPressed;
               },
-              child: _ProfileItem(),
+              child: _ProfileItem(isDarkMode),
             ),
           ),
         ),
@@ -88,7 +119,9 @@ class _ProfilePageState extends State<ProfilePage>
 }
 
 class _ProfileItem extends StatelessWidget {
-  _ProfileItem();
+  _ProfileItem(this.isDarkMode);
+
+  final bool isDarkMode;
 
   final font = GoogleFonts.firaMono(fontSize: 14);
 
@@ -99,14 +132,18 @@ class _ProfileItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final now = DateTime.now();
+    final textColor = isDarkMode ? Colors.white70 : Colors.black87;
     return Container(
       width: 400,
       padding: const EdgeInsets.all(12),
       margin: const EdgeInsets.all(32),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: isDarkMode ? Colors.black87 : Colors.white,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.black, width: 2),
+        border: Border.all(
+          color: isDarkMode ? Colors.white : Colors.black,
+          width: 2,
+        ),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.03),
@@ -133,7 +170,10 @@ class _ProfileItem extends StatelessWidget {
               const SizedBox(width: 8),
               Text(
                 "frame_it/README.md",
-                style: font.copyWith(fontWeight: FontWeight.bold),
+                style: font.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: textColor,
+                ),
               ),
               const Spacer(),
               IconButton(
@@ -173,8 +213,11 @@ class _ProfileItem extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Hi, we are frame_it app", style: font),
-              SizedBox(height: 14),
+              Text(
+                "Hi, we are frame_it team",
+                style: font.copyWith(color: textColor),
+              ),
+              SizedBox(height: 4),
               Text(
                 "We created awesome pictures with frames",
                 style: font.copyWith(
@@ -184,7 +227,7 @@ class _ProfileItem extends StatelessWidget {
               ),
               SizedBox(height: 4),
               _TextItem(
-                text: '+ 📍 live in danang, vietnam 🇻🇳',
+                text: '% 📍 live in danang, vietnam 🇻🇳',
                 color: Colors.green,
               ),
               _TextItem(
@@ -205,10 +248,12 @@ class _ProfileItem extends StatelessWidget {
             width: double.infinity,
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: Colors.pink.shade100.withAlpha(50),
+              color: isDarkMode
+                  ? Colors.blueGrey.shade900
+                  : Colors.pink.shade100.withAlpha(50),
               borderRadius: BorderRadius.circular(12),
             ),
-            child: const Column(
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
@@ -225,14 +270,17 @@ class _ProfileItem extends StatelessWidget {
                     _MemberItem(
                       imagePath: 'assets/profile/fe.jpg',
                       roleName: 'FrontendDev',
+                      isDarkMode: isDarkMode,
                     ),
                     _MemberItem(
                       imagePath: 'assets/profile/mo.jpg',
                       roleName: 'MobileDev',
+                      isDarkMode: isDarkMode,
                     ),
                     _MemberItem(
                       imagePath: 'assets/profile/be.jpg',
                       roleName: 'BackendDev',
+                      isDarkMode: isDarkMode,
                     ),
                   ],
                 ),
@@ -242,14 +290,17 @@ class _ProfileItem extends StatelessWidget {
                     _MemberItem(
                       imagePath: 'assets/profile/mkt.jpg',
                       roleName: 'Marketing',
+                      isDarkMode: isDarkMode,
                     ),
                     _MemberItem(
                       imagePath: 'assets/profile/pm.jpg',
                       roleName: 'ProjectMan',
+                      isDarkMode: isDarkMode,
                     ),
                     _MemberItem(
                       imagePath: 'assets/profile/des.jpg',
                       roleName: 'Designer',
+                      isDarkMode: isDarkMode,
                     ),
                   ],
                 ),
@@ -268,7 +319,10 @@ class _ProfileItem extends StatelessWidget {
           const SizedBox(height: 8),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 8),
-            color: Colors.purple.shade100,
+            decoration: BoxDecoration(
+              color: Colors.purple.shade100,
+              borderRadius: BorderRadius.circular(2),
+            ),
             child: Text.rich(
               textAlign: TextAlign.start,
               TextSpan(
@@ -299,17 +353,23 @@ class _TextItem extends StatelessWidget {
     return Container(
       color: color.withValues(alpha: 0.2),
       margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 3),
-      padding: const EdgeInsets.all(1) + const EdgeInsets.only(right: 8),
+      padding:
+          const EdgeInsets.all(1) + const EdgeInsets.only(right: 8, left: 4),
       child: Text(text, style: TextStyle(fontSize: 13, color: color)),
     );
   }
 }
 
 class _MemberItem extends StatelessWidget {
-  const _MemberItem({required this.imagePath, required this.roleName});
+  const _MemberItem({
+    required this.imagePath,
+    required this.roleName,
+    required this.isDarkMode,
+  });
 
   final String imagePath;
   final String roleName;
+  final bool isDarkMode;
 
   void onTap(context) {
     showDialog(
@@ -362,7 +422,13 @@ class _MemberItem extends StatelessWidget {
           children: [
             CircleAvatar(radius: 28, backgroundImage: AssetImage(imagePath)),
             const SizedBox(height: 8),
-            Text(roleName, style: const TextStyle(fontSize: 12)),
+            Text(
+              roleName,
+              style: TextStyle(
+                fontSize: 12,
+                color: isDarkMode ? Colors.white : Colors.black87,
+              ),
+            ),
           ],
         ),
       ),
